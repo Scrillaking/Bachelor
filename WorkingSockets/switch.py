@@ -1,6 +1,5 @@
 
 import socket, optparse, os
-from DiffieHellman import *
 
 class Switch(object):
 
@@ -9,8 +8,6 @@ class Switch(object):
   self.ip = ip
   self.port = port
   self.name = name
-
-  self.dh = DiffieHellman()
 
   self.ipToKey = {
     '10.0.0.1': '' , 
@@ -31,8 +28,7 @@ class Switch(object):
   self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
   self.s.bind((self.ip, self.port))
 
-  self.writeToLog("All set")
-  self.receive()
+  self.listen()
 
 
  def writeToLog(self , text):
@@ -46,20 +42,35 @@ class Switch(object):
   self.s.sendto(str(msg), (ip, port))
 
  
- def receive(self):
+ def listen(self):
 
-  d = self.s.recvfrom(4096)
-  receivedData = d[0]
-  senderAddress = d[1]
+  while(1):
+   
+   d = self.s.recvfrom(4096)
+   receivedData = d[0]
+   senderAddress = d[1]
   
-  self.writeToLog("Received : "+receivedData)
+   if not receivedData: 
+    break
 
-  if senderAddress[0] in self.ipToKey.keys():
-   if(self.ipToKey[senderAddress[0]] == ''):
-    self.ipToKey[senderAddress[0]] = self.dh.genKey(receivedData)
-    self.send(senderAddress[0] , self.networkNodes[senderAddress[0]] , self.dh.genPublicKey())
-    self.writeToLog(str(ipToKey))
+   self.writeToLog("Received : "+receivedData)
+   #self.writeToLog("Sender : "+senderAddress[0]+":"+str(senderAddress[1])) 
+
+   senderIP = senderAddress[0]
+   senderPort = int(senderAddress[1])  
+
+   if senderIP in self.ipToKey.keys():
+
+    if(self.ipToKey[senderIP] == ''):
+
+     self.ipToKey[senderIP] = receivedData
+
+     self.writeToLog(str(self.ipToKey))
+
+     #self.send(senderIP , senderPort , self.dh.publicKey)
+    
+    else:
+     self.writeToLog("No match 1")
+  
    else:
-    print "No Match !!" 	
-
-  return receivedData  
+    self.writeToLog("No match 2") 

@@ -1,6 +1,5 @@
 
 import socket, optparse, os
-from DiffieHellman import *
 
 class Host(object):
 
@@ -9,8 +8,6 @@ class Host(object):
   self.ip = ip
   self.port = port
   self.name = name
-
-  self.dh = DiffieHellman()
 
   self.ipToKey = {
     '10.0.0.20': '' , 
@@ -29,12 +26,8 @@ class Host(object):
   }
 
   self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-  self.writeToLog("Binding ...")
   self.s.bind((self.ip, self.port))
-
-  self.writeToLog("All set")
-
+  
 
  def writeToLog(self , text):
   
@@ -66,12 +59,11 @@ class Host(object):
   
   for curIP in path:
 
-   myPublic = self.dh.genPublicKey()
-   self.send(curIP , self.networkNodes[curIP] , myPublic)
-   self.writeToLog("Sent : "+str(myPublic))
+   if curIP in self.networkNodes.keys():
+    sharedKey = os.urandom(16) 
+    self.ipToKey[curIP] = sharedKey
+    self.send(curIP , self.networkNodes[curIP] , sharedKey)
 
-   otherPublic = self.receive()
-   self.writeToLog("Received : "+otherPublic)
-   shared = self.dh.genKey(otherPublic)
-   ipToKey[curIP] = shared
-   self.writeToLog(str(ipToKey))
+    #otherPublic = self.receive()
+
+  self.writeToLog(str(self.ipToKey))  
