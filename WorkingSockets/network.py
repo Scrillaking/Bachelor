@@ -39,17 +39,23 @@ def main():
 
    net.start()
 
-   p_s1 = s1.popen('python s1.py')
+   p_s1 = s1.popen('python newSwitch.py s1 10.0.0.20 3000')
    time.sleep(1)
 
-   p_s2 = s2.popen('python s2.py')
+   p_s2 = s2.popen('python newSwitch.py s2 10.0.0.30 3100')
    time.sleep(1)
 
-   p_s3 = s3.popen('python s3.py')
+   p_s3 = s3.popen('python newSwitch.py s3 10.0.0.40 3200')
    time.sleep(1)
 
-   p_h1 = h1.popen('python h1.py')
+   p_h1 = h1.popen('python newHost.py h1 10.0.0.1 2000')
    time.sleep(1)
+
+   #p_h2 = h2.popen('python newHost.py h2 10.0.0.2 2100')
+   #time.sleep(1)
+
+   #p_h3 = h3.popen('python newHost.py h3 10.0.0.3 2200')
+   #time.sleep(1)
    
    CLI( net )
 
@@ -58,6 +64,8 @@ def main():
    p_s3.terminate()
    
    p_h1.terminate()
+   #p_h2.terminate()
+   #p_h3.terminate()
 
    net.stop()
 

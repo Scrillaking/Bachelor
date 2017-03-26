@@ -12,22 +12,25 @@ class Host(object):
 
   self.dh = DiffieHellman()
 
-  self.networkNodes = {
-    'localhost': 3000 , 
-    'localhost': 3100 , 
-    'localhost': 3200 ,
-    'localhost': 2000 , 
-    'localhost': 2100 , 
-    'localhost': 2200
+  self.ipToKey = {
+    '10.0.0.20': '' , 
+    '10.0.0.30': '' , 
+    '10.0.0.40': ''
   }
 
-  self.ipToKey = {
-    'localhost': '' , 
-    'localhost': '' , 
-    'localhost': ''
+  self.networkNodes = {
+    '10.0.0.1': 2000 , 
+    '10.0.0.2': 2100 , 
+    '10.0.0.3': 2200 ,
+
+    '10.0.0.20': 3000 , 
+    '10.0.0.30': 3100 , 
+    '10.0.0.40': 3200
   }
 
   self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+  self.writeToLog("Binding ...")
   self.s.bind((self.ip, self.port))
 
   self.writeToLog("All set")
@@ -53,6 +56,10 @@ class Host(object):
   self.writeToLog("Received : "+receivedData+" From : "+senderAddress[0])
   return receivedData
 
+
+ def choosePath(self , dest):
+
+  return ['10.0.0.20' , '10.0.0.30' , '10.0.0.40']   #Will update it later	
 
 
  def negotiateKeys(self , path):

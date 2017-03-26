@@ -1,8 +1,22 @@
 
+import sys
 from host import *
-from switch import *
 
-h1 = Host('h1' , 'localhost' , 2000)
-h1.negotiateKeys(['localhost'])
+name = sys.argv[1]
+ip = sys.argv[2]
+port = sys.argv[3]
 
-s1 = switch('s1' , 'localhost' , 3000)
+with open("log.txt", "a") as myfile:
+ myfile.write("< newHost >" + "\n" + 'Argument List:', str(sys.argv) + "\n\n")
+
+h = Host(name , ip , port)
+
+with open("log.txt", "a") as myfile:
+ myfile.write("< newHost >" + "\n" + "Created " + name + "\n\n")
+
+path = h.choosePath('h3')
+
+with open("log.txt", "a") as myfile:
+ myfile.write("< newHost >" + "\n" + "Chosen path : " + str(path) + "\n\n")
+
+h.negotiateKeys(path)

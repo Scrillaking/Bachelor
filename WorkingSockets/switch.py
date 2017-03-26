@@ -12,25 +12,27 @@ class Switch(object):
 
   self.dh = DiffieHellman()
 
-  self.networkNodes = {
-    'localhost': 3000 , 
-    'localhost': 3100 , 
-    'localhost': 3200 ,
-    'localhost': 2000 , 
-    'localhost': 2100 , 
-    'localhost': 2200
+  self.ipToKey = {
+    '10.0.0.1': '' , 
+    '10.0.0.2': '' , 
+    '10.0.0.3': ''
   }
 
-  self.ipToKey = {
-    'localhost': '' , 
-    'localhost': '' , 
-    'localhost': ''
+  self.networkNodes = {
+    '10.0.0.1': 2000 , 
+    '10.0.0.2': 2100 , 
+    '10.0.0.3': 2200 ,
+
+    '10.0.0.20': 3000 , 
+    '10.0.0.30': 3100 , 
+    '10.0.0.40': 3200
   }
 
   self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
   self.s.bind((self.ip, self.port))
 
   self.writeToLog("All set")
+  self.receive()
 
 
  def writeToLog(self , text):
@@ -50,12 +52,13 @@ class Switch(object):
   receivedData = d[0]
   senderAddress = d[1]
   
-  self.writeToLog("Received : "+receivedData+" From : "+senderAddress[0])
+  self.writeToLog("Received : "+receivedData)
 
   if senderAddress[0] in self.ipToKey.keys():
    if(self.ipToKey[senderAddress[0]] == ''):
     self.ipToKey[senderAddress[0]] = self.dh.genKey(receivedData)
-    self.send(senderAddress[0])
+    self.send(senderAddress[0] , self.networkNodes[senderAddress[0]] , self.dh.genPublicKey())
+    self.writeToLog(str(ipToKey))
    else:
     print "No Match !!" 	
 
