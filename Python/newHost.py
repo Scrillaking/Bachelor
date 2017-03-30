@@ -8,9 +8,8 @@ ip = sys.argv[2]
 port = sys.argv[3]
 
 h = Host(name , ip , int(port))
-path = h.choosePath('h3')
 
-#chat_client = Chat_Client()
-#chat_client.start()
+h.send('10.0.0.20',3000,"Hello from h1")
 
-h.negotiateKeys(path)
+#path = h.choosePath('h3')
+#h.negotiateKeys(path)

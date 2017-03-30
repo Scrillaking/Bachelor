@@ -26,10 +26,10 @@ class Switch(object):
     '10.0.0.40': 3200
   }
 
-  self.chat_client = Chat_Client()
+  self.chat_client = Chat_Client(self.name)
   self.chat_client.start()
-  self.chat_client.sendToController("Hi my name is : "+self.name)
-  
+  self.chat_client.sendAndReceive("Hello")
+
   self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
   self.s.bind((self.ip, self.port))
 
@@ -59,6 +59,7 @@ class Switch(object):
     break
 
    self.writeToLog("Received : "+receivedData)
+   self.chat_client.sendAndReceive("Somebody sent me : "+receivedData)
 
    senderIP = senderAddress[0]
    senderPort = int(senderAddress[1])  

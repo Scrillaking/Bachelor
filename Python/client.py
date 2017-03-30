@@ -4,47 +4,54 @@ import threading
 import select
 import time
 
+
 class Chat_Client(threading.Thread):
 
-    def __init__(self):
-        threading.Thread.__init__(self)
-        self.destip = '127.0.0.1'
-        self.sock = None
-        self.PORT = 4500
-        self.running = 1
+
+ def __init__(self , name):
+
+  threading.Thread.__init__(self)
+  self.name = name
 
 
-    def run(self):
-
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect((self.destip, self.PORT))
-        time.sleep(1)
-
-        while self.running == True:
-
-            inputready,outputready,exceptready = select.select ([self.sock],[self.sock],[])
-            for input_item in inputready:
-                data = self.sock.recv(1024)
-                if data:
-                    self.writeToLog("Received : "+data)
-                else:
-                    break
-            time.sleep(1)
-
-    
-    def writeToLog(self , text):
-
-        with open("log.txt", "a") as myfile:
-            myfile.write("< client >" + "\n" + text + "\n\n")
+ def run(self):
+  self.writeToLog('Started')
 
 
-    def sendToController(self , msg):
-        if self.sock is None:
-            time.sleep(2)
-            self.sock.sendto(msg+"\r\n",(self.destip, self.PORT))
-            self.writeToLog("Sent : "+msg+"\r\n")   
+ def writeToLog(self , text):
+
+  with open("log.txt", "a") as myfile:
+   myfile.write("< " + self.name + " >" + "\n" + text + "\n\n")
 
 
-    def kill(self):
+ def connect(self):
 
-        self.running = 0
+  sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  sock.connect(('127.0.0.1',4500))
+  return sock
+
+
+ def sendAndReceive(self, msg):
+
+  msg += "\r\n"
+
+  sock = self.connect()
+  sock.sendall(msg)
+  self.writeToLog('Sent : ' + msg)
+
+  while 1:
+   
+   response = sock.recv(1024)
+
+   if not response:
+    sock.close()
+    break
+
+   else:
+    self.writeToLog('Controller response : ' + response)
+    return response
+
+
+#client = Chat_Client()
+#client.sendAndReceive("Hello")
+#client.sendAndReceive("Hello again")
