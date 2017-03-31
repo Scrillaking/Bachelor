@@ -55,6 +55,11 @@ class Host(object):
 
   return ['10.0.0.20' , '10.0.0.30' , '10.0.0.40']   #Will update it later	
 
+ 
+ def notifyController(self , path):
+
+  self.send(path[0],self.networkNodes[path[0]],"CONTROLLER"+str(path)) 
+
 
  def negotiateKeys(self , path):
   

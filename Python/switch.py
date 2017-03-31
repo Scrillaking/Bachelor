@@ -28,7 +28,7 @@ class Switch(object):
 
   self.chat_client = Chat_Client(self.name)
   self.chat_client.start()
-  self.chat_client.sendAndReceive("Hello")
+  #self.chat_client.sendAndReceive("Hello")
 
   self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
   self.s.bind((self.ip, self.port))
@@ -59,21 +59,25 @@ class Switch(object):
     break
 
    self.writeToLog("Received : "+receivedData)
-   self.chat_client.sendAndReceive("Somebody sent me : "+receivedData)
-
+   
    senderIP = senderAddress[0]
    senderPort = int(senderAddress[1])  
 
-   if senderIP in self.ipToKey.keys():
+   if senderIP in self.networkNodes.keys():
 
-    if(self.ipToKey[senderIP] == ''):
+    if receivedData.startswith("CONTROLLER"):
+     self.chat_client.sendAndReceive(senderIP + " sent me : " + receivedData[10:])
 
-     self.ipToKey[senderIP] = receivedData
-
-     self.writeToLog(str(self.ipToKey))
-    
     else:
-     self.writeToLog("No match 1")
-  
-   else:
-    self.writeToLog("No match 2") 
+
+     if senderIP in self.ipToKey.keys():
+
+      if(self.ipToKey[senderIP] == ''):  #key exchange
+
+       self.ipToKey[senderIP] = receivedData
+       self.writeToLog(str(self.ipToKey))
+
+      #else:  #data
+       #decrypt one layer
+       #ask controller about next hop (if not known)
+       #forward

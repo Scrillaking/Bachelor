@@ -52,6 +52,6 @@ class Chat_Client(threading.Thread):
     return response
 
 
-#client = Chat_Client()
+#client = Chat_Client("SomeName")
 #client.sendAndReceive("Hello")
 #client.sendAndReceive("Hello again")

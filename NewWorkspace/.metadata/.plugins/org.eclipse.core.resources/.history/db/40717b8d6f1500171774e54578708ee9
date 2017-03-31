@@ -1,0 +1,108 @@
+package net.floodlightcontroller.controller;
+
+import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.*;
+
+public class ServerHandler extends Thread{
+
+	static ArrayList<String> usernames;
+	static ArrayList<String> passwords;
+	
+	BufferedReader streamIn;
+    PrintStream streamOut;
+    Socket socket;
+    int useridindex = 0;
+    
+	public ServerHandler(Socket socket){
+		this.socket=socket;
+		//initiate();
+	}
+	
+	public void initiate(){
+		
+		usernames = new ArrayList<String>();
+		usernames.add(("bakry"));
+		usernames.add(("omar"));
+		usernames.add(("karim"));
+		usernames.add(("mohamed"));
+		usernames.add(("shamy"));
+		passwords = new ArrayList<String>();
+		passwords.add(("bakrybakry"));
+		passwords.add(("omaromar"));
+		passwords.add(("karimkarim"));
+		passwords.add(("mohamedmohamed"));
+		passwords.add(("shamyshamy"));
+		
+    }
+	
+	public boolean checkuser(String user){
+		
+		for(int i =0 ; i<usernames.size();i++){
+			if(usernames.get(i).equals(user)){
+				useridindex=i;
+			
+				
+			return true;
+			}
+			
+		}
+		return false;
+	}
+	
+	public int finduser(String user){
+		int numberofuser=0;
+		for(int i =0 ; i<usernames.size();i++){
+			if(usernames.get(i).equals(user)){
+				numberofuser=i;
+				break;}
+		}
+		return numberofuser;
+		
+	}
+
+	public void run(){
+		
+		try {
+			System.err.println("New client just connected");
+			streamOut = new PrintStream(socket.getOutputStream(), true);
+			streamIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		} 
+		catch (Exception e1) {
+			try {
+				socket.close();
+				e1.printStackTrace();
+			} 
+			catch (Exception e2) {
+				e2.printStackTrace();
+			}
+			e1.printStackTrace();
+		}
+	
+		while(true){
+
+			try{
+				Thread.sleep(1);
+				String message = streamIn.readLine();
+            	if(message.equals("EXIT")){
+            		socket.close();
+            		return;
+            	}
+            	else{
+					Thread.sleep(1);
+					System.err.println("Client sent --> "+message);
+                    streamOut.println("You sent : " + message);
+				}
+            
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				
+			}
+	    }
+			
+    }
+
+}
