@@ -1,6 +1,8 @@
 
 import socket, optparse, os
 from client import *
+from DH import *
+from AES import *
 
 class Host(object):
 
@@ -9,6 +11,9 @@ class Host(object):
   self.ip = ip
   self.port = port
   self.name = name
+
+  self.dh = DiffieHellman()
+  self.sessionKey = ''
 
   self.ipToKey = {
     '10.0.0.20': '' , 
@@ -55,10 +60,17 @@ class Host(object):
 
   return ['10.0.0.20' , '10.0.0.30' , '10.0.0.40']   #Will update it later	
 
- 
+
  def notifyController(self , path):
 
-  self.send(path[0],self.networkNodes[path[0]],"CONTROLLER"+str(path)) 
+  if not self.sessionKey:
+   self.writeToLog("Session key is not yet known")
+
+  else: 
+   cipher = AESCipher('mysecretpassword' , self.sessionKey)
+   encrypted = cipher.encrypt(str(path))
+  
+   self.send(path[0],self.networkNodes[path[0]],"CONTROLLER"+encrypted) 
 
 
  def negotiateKeys(self , path):
