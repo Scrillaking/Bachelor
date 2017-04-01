@@ -66,7 +66,8 @@ class Switch(object):
    if senderIP in self.networkNodes.keys():
 
     if receivedData.startswith("CONTROLLER"):
-     self.chat_client.sendAndReceive(senderIP + " sent me : " + receivedData[10:])
+     response = self.chat_client.sendAndReceive(receivedData[10:])
+     self.send(senderIP , senderPort , response)
 
     else:
 

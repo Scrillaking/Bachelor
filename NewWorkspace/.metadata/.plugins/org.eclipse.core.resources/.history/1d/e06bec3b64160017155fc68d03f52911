@@ -1,0 +1,34 @@
+package net.floodlightcontroller.controller;
+
+public class DH {
+
+	public DH(){
+		
+		  long prime = (long)Math.pow(2,768); 
+		  int base = 5;
+		  		  
+		  int privateKey = genRandom(2);
+		  System.err.println("Private key : "+privateKey);
+		  
+		  long publicValue = ((long)Math.pow(base,privateKey)) % prime;
+		  System.err.println("Public value : "+publicValue);
+		  
+	}
+	
+	public int genRandom(int bits){	
+		
+	    long range_start = (long)Math.pow(10,(bits-1));
+	    long range_end = (long)(Math.pow(10,(bits))-1);
+	    return (int)(range_start + range_end * Math.random());
+	    
+	}
+	
+	public static void main(String[] args) {
+		
+		//other public : 55511151231257827021181583404541015625
+		
+		
+		
+	}
+	
+}

@@ -1,0 +1,20 @@
+package net.floodlightcontroller.controller;
+
+public class DH {
+
+	public DH(){
+		
+		  long prime = (long)Math.pow(2,768); 
+		  int base = 5;
+		  		  
+		  self.privateKey = self.genRandom(2)
+		  self.publicValue = (self.base**self.privateKey) % self.prime
+		
+	}
+	
+	public int genRandom(int bits){	
+	    long range_start = (long)Math.pow(10,(bits-1));
+	    long range_end = (10**bits)-1
+	}
+	
+}

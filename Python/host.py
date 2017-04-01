@@ -52,7 +52,7 @@ class Host(object):
   receivedData = d[0]
   senderAddress = d[1]
 
-  self.writeToLog("Received : "+receivedData+" From : "+senderAddress[0])
+  self.writeToLog("Received : "+str(receivedData))
   return receivedData
 
 
