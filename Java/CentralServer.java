@@ -1,0 +1,38 @@
+package net.floodlightcontroller.controller;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+
+public class CentralServer extends Thread{
+	
+	ServerSocket server ;
+	ArrayList<Boolean> onlinetable;
+	ArrayList<ServerHandler> clients;
+	
+	public CentralServer()throws Exception {
+		
+		server = new ServerSocket(4500);
+		System.err.println("Server listening on port 4500 ...");
+
+		while(true){
+			
+			try {
+
+				Thread.sleep(1);
+				Socket socket = server.accept();
+				//socket.setSoTimeout(0);
+				new ServerHandler(socket).start();
+				
+			} 
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+		
+
+	}
+
+}
