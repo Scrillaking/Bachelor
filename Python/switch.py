@@ -11,23 +11,25 @@ class Switch(object):
   self.name = name
 
   self.ipToKey = {
-    '10.0.0.1': '' , 
-    '10.0.0.2': '' , 
-    '10.0.0.3': ''
+	'10.0.0.1': '' , 
+	'10.0.0.2': '' , 
+	'10.0.0.3': ''
   }
 
   self.networkNodes = {
-    '10.0.0.1': 2000 , 
-    '10.0.0.2': 2100 , 
-    '10.0.0.3': 2200 ,
+	'10.0.0.1': 2000 , 
+	'10.0.0.2': 2100 , 
+	'10.0.0.3': 2200 ,
 
-    '10.0.0.20': 3000 , 
-    '10.0.0.30': 3100 , 
-    '10.0.0.40': 3200
+	'10.0.0.20': 3000 , 
+	'10.0.0.30': 3100 , 
+	'10.0.0.40': 3200
   }
 
   self.chat_client = Chat_Client(self.name)
   self.chat_client.start()
+
+
   #self.chat_client.sendAndReceive("Hello")
 
   self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -56,7 +58,7 @@ class Switch(object):
    senderAddress = d[1]
   
    if not receivedData: 
-    break
+	break
 
    self.writeToLog("Received : "+receivedData)
    
@@ -65,20 +67,23 @@ class Switch(object):
 
    if senderIP in self.networkNodes.keys():
 
-    if receivedData.startswith("CONTROLLER"):
-     response = self.chat_client.sendAndReceive(receivedData[10:])
-     self.send(senderIP , senderPort , response)
+	if receivedData.startswith("CONTROLLER"):
+	 response = self.chat_client.sendAndReceive(receivedData[10:])
+	 self.send(senderIP , senderPort , response)
+	 
 
-    else:
+	else:
 
-     if senderIP in self.ipToKey.keys():
+	 if receivedData.startswith("PATH"):
+	   self.chat_client.sendOnly(receivedData)
+	   
+	   
+	  #if(self.ipToKey[senderIP] == ''):  #key exchange
 
-      if(self.ipToKey[senderIP] == ''):  #key exchange
+	   #elf.ipToKey[senderIP] = receivedData
+	   #self.writeToLog(str(self.ipToKey))
 
-       self.ipToKey[senderIP] = receivedData
-       self.writeToLog(str(self.ipToKey))
-
-      #else:  #data
-       #decrypt one layer
-       #ask controller about next hop (if not known)
-       #forward
+	  #else:  #data
+	   #decrypt one layer
+	   #ask controller about next hop (if not known)
+	   #forward

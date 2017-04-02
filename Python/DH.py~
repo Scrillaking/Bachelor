@@ -24,7 +24,7 @@ class DiffieHellman(object):
 
  def genSharedSecret(self , otherPublic):
   sessionKey = str((otherPublic ** self.privateKey) % self.prime)
-  return sessionKey[0:16] 	
+  return sessionKey 	
 
 
 

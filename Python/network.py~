@@ -7,9 +7,6 @@ from mininet.node import OVSSwitch, RemoteController
 import time 
 
 def main():
-   f = open('log.txt','w')
-   f.write("Started Network.py \n")
-   f.flush()
 
    lg.setLogLevel('info')
 
@@ -17,7 +14,7 @@ def main():
    net = Mininet(controller=RemoteController)
  
    #Connect to the floodlight controller
-   net.addController('c0' , controller=RemoteController,ip="127.0.0.1",port=6653)
+   net.addController('c0' , controller=RemoteController,ip="0.0.0.0",port=6633)
  
    #Add hosts
    h1 = net.addHost('h1')
@@ -73,4 +70,4 @@ def main():
    net.stop()
 
 if __name__ == '__main__':
-	main()
+    main()

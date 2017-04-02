@@ -1,0 +1,38 @@
+Started Network.py 
+< s1 >
+Started
+
+< s2 >
+Started
+
+< s3 >
+Started
+
+< s1 >
+Received : CONTROLLERKEY19073486328125
+
+< s1 >
+Sent : KEY19073486328125
+
+
+< s1 >
+Controller response : 30517578125
+
+
+< h1 >
+Received : 30517578125
+
+
+< h1 >
+SESSION KEY : 1094697730502552
+
+< h1 >
+h1 sent PATHBWCOkVSoPbm1S/UaiqGbARYax9W2cf4dKWOfw4viWLU=
+
+< s1 >
+Received : PATHBWCOkVSoPbm1S/UaiqGbARYax9W2cf4dKWOfw4viWLU=
+
+< s1 >
+Sent : PATHBWCOkVSoPbm1S/UaiqGbARYax9W2cf4dKWOfw4viWLU=
+
+

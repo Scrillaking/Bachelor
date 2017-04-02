@@ -1,6 +1,10 @@
-package net.floodlightcontroller.controller;
+package net.floodlightcontroller.mactracker;
 
 import java.util.ArrayList;
+
+import net.floodlightcontroller.mactracker.AES.Mode;
+import net.floodlightcontroller.mactracker.AES.Padding;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -13,6 +17,7 @@ public class ServerHandler extends Thread{
 	static ArrayList<String> passwords;
 	
 	DH dh;
+	String sessionKey;
 	
 	BufferedReader streamIn;
     PrintStream streamOut;
@@ -92,9 +97,9 @@ public class ServerHandler extends Thread{
 				String message = streamIn.readLine();
 								
             	if(message == null){
-            		System.err.println("No more messages . Closing socket ...");
-            		socket.close();
-            		break;
+            		//System.err.println("No more messages . Closing socket ...");
+            		//socket.close();
+            		//break;
             	}
             	else{
 					Thread.sleep(1);
@@ -103,11 +108,21 @@ public class ServerHandler extends Thread{
 					
 					if(message.startsWith("KEY")){
 						String sent = message.substring(3);						
-						String sessionKey = dh.genSessionKey(new BigInteger(sent));
+						sessionKey = dh.genSessionKey(new BigInteger(sent));
 						System.err.println("Session Key : "+sessionKey);
-						
-						
 						streamOut.println(dh.publicValue);
+					}
+					else {
+						
+						if(message.startsWith("PATH")){
+							String sent = message.substring(4);
+							AES aes = new AES();
+							String decryptedPath = aes.decrypt(sent,Mode.ECB,Padding.NoPadding,sessionKey);
+							System.err.println("Full Path is  "+decryptedPath);
+
+							
+							
+						}
 					}
 					
                     //streamOut.println("You sent : " + message);
