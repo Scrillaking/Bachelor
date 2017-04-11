@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 
 public class ServerCentral extends Thread{
@@ -11,6 +12,9 @@ public class ServerCentral extends Thread{
 	ServerSocket server ;
 	ArrayList<Boolean> onlinetable;
 	ArrayList<ServerHandler> clients;
+	static long curID = 0;
+	static Hashtable<Long, String> idToKey = new Hashtable<>();
+	static Hashtable<Long, String> idToNextHob = new Hashtable<>();
 	
 	public ServerCentral()throws Exception {
 		server = new ServerSocket(4500);

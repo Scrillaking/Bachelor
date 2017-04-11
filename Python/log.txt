@@ -1,38 +1,260 @@
-Started Network.py 
+started network file
 < s1 >
-Started
+Listening for connections
 
 < s2 >
-Started
+Listening for connections
 
 < s3 >
-Started
+Listening for connections
+
+< h1 >
+Initializing socket then Connecting to : 10.0.0.20 : 3000
 
 < s1 >
-Received : CONTROLLERKEY19073486328125
+Accepted connection from : ('10.0.0.1', 52588)
 
 < s1 >
-Sent : KEY19073486328125
+Received :  CONTROLLERKEY319087683172002077from : 10.0.0.1
+
+< h1 >
+sent : CONTROLLERKEY319087683172002077
+
+< s1 >
+Sent : KEY319087683172002077
 
 
 < s1 >
-Controller response : 30517578125
+Controller response : 1220703125_1
+
+
+< s1 >
+sent to controller : KEY319087683172002077
+
+< h1 >
+Received : 1220703125_1
 
 
 < h1 >
-Received : 30517578125
-
-
-< h1 >
-SESSION KEY : 1094697730502552
+SESSION KEY : 8685506040415315
 
 < h1 >
-h1 sent PATHBWCOkVSoPbm1S/UaiqGbARYax9W2cf4dKWOfw4viWLU=
+Sending msg as we already have an established socket with : 10.0.0.20
+
+< h1 >
+sent : CONTROLLERPATH1
+_1euYEflzh8ZE/A5pakd2cfrfK9ESCXYK94y0D9FzGms=
 
 < s1 >
-Received : PATHBWCOkVSoPbm1S/UaiqGbARYax9W2cf4dKWOfw4viWLU=
+Received :  CONTROLLERPATH1
+_1euYEflzh8ZE/A5pakd2cfrfK9ESCXYK94y0D9FzGms=from : 10.0.0.1
 
 < s1 >
-Sent : PATHBWCOkVSoPbm1S/UaiqGbARYax9W2cf4dKWOfw4viWLU=
+Sent : PATH1 _1euYEflzh8ZE/A5pakd2cfrfK9ESCXYK94y0D9FzGms=
 
+
+< s1 >
+Controller response : OK
+
+< s1 >
+sent to controller : PATH1
+_1euYEflzh8ZE/A5pakd2cfrfK9ESCXYK94y0D9FzGms=
+
+< h1 >
+Received : OK
+
+< h1 >
+>>>>>>>>>> 10.0.0.20
+
+< h1 >
+Sending msg as we already have an established socket with : 10.0.0.20
+
+< h1 >
+sent : KEY5_319087683172002077
+
+< s1 >
+Received :  KEY5_319087683172002077from : 10.0.0.1
+
+< s1 >
+Shared 2785845957418256 with 10.0.0.1
+
+< s1 >
+{5L: '2785845957418256'}
+
+< h1 >
+Received : 256475203416950553
+
+< h1 >
+Shared key : 2785845957418256
+
+< h1 >
+>>>>>>>>>> 10.0.0.30
+
+< h1 >
+Closing socket and opening a new connection with : 10.0.0.30
+
+< s2 >
+Accepted connection from : ('10.0.0.1', 58614)
+
+< h1 >
+sent : KEY21_319087683172002077
+
+< s2 >
+Received :  KEY21_319087683172002077from : 10.0.0.1
+
+< s2 >
+Shared 2878683380136314 with 10.0.0.1
+
+< s2 >
+{21L: '2878683380136314'}
+
+< h1 >
+Received : 1129103815239492505
+
+< h1 >
+Shared key : 2878683380136314
+
+< h1 >
+>>>>>>>>>> 10.0.0.40
+
+< h1 >
+Closing socket and opening a new connection with : 10.0.0.40
+
+< s3 >
+Accepted connection from : ('10.0.0.1', 47912)
+
+< h1 >
+sent : KEY85_319087683172002077
+
+< s3 >
+Received :  KEY85_319087683172002077from : 10.0.0.1
+
+< s3 >
+Shared 3717436704518824 with 10.0.0.1
+
+< s3 >
+{85L: '3717436704518824'}
+
+< h1 >
+Received : 533051569282746269
+
+< h1 >
+Shared key : 3717436704518824
+
+< h1 >
+{'10.0.0.40': '3717436704518824', '10.0.0.30': '2878683380136314', '10.0.0.20': '2785845957418256'}
+
+< h1 >
+DATA NOW : VNux3AXtgooyWPTWjET46Q==
+
+< h1 >
+DATA NOW : utnkmdOgvLU93GrJ/9/Ty0pfP69ZQrJ7AU+5h+9goPs=
+
+< h1 >
+DATA NOW : zwqdsn49gAWk9e88ndDug2Hj9eFheg3HVI91QHxz6BYU47ZB3mzXWOcIrflWGQI3
+
+< h1 >
+Closing socket and opening a new connection with : 10.0.0.20
+
+< s1 >
+Accepted connection from : ('10.0.0.1', 52594)
+
+< h1 >
+sent : DATA5_zwqdsn49gAWk9e88ndDug2Hj9eFheg3HVI91QHxz6BYU47ZB3mzXWOcIrflWGQI3
+
+< s1 >
+Received :  DATA5_zwqdsn49gAWk9e88ndDug2Hj9eFheg3HVI91QHxz6BYU47ZB3mzXWOcIrflWGQI3from : 10.0.0.1
+
+< s1 >
+DEC DATA : utnkmdOgvLU93GrJ/9/Ty0pfP69ZQrJ7AU+5h+9goPs=
+
+< s1 >
+OBTAINING NEXT HOB ....
+
+< s1 >
+Sent : NEXT21
+
+
+< s1 >
+Controller response : 10.0.0.30
+
+
+< s1 >
+NEXT HOB : 10.0.0.30
+
+
+< s1 >
+entered sendtoswitch
+
+< s1 >
+Initializing socket then Connecting to : 10.0.0.30
+ : 3000
+
+< s2 >
+Accepted connection from : ('10.0.0.30', 33677)
+
+< s1 >
+sent : DATA21_utnkmdOgvLU93GrJ/9/Ty0pfP69ZQrJ7AU+5h+9goPs=
+
+< s2 >
+Received :  DATA21_utnkmdOgvLU93GrJ/9/Ty0pfP69ZQrJ7AU+5h+9goPs=from : 10.0.0.30
+
+< s2 >
+DEC DATA : VNux3AXtgooyWPTWjET46Q==
+
+< s2 >
+OBTAINING NEXT HOB ....
+
+< s2 >
+Sent : NEXT85
+
+
+< s2 >
+Controller response : 10.0.0.40
+
+
+< s2 >
+NEXT HOB : 10.0.0.40
+
+
+< s2 >
+entered sendtoswitch
+
+< s2 >
+Initializing socket then Connecting to : 10.0.0.40
+ : 3000
+
+< s3 >
+Accepted connection from : ('10.0.0.40', 39478)
+
+< s2 >
+sent : DATA85_VNux3AXtgooyWPTWjET46Q==
+
+< s3 >
+Received :  DATA85_VNux3AXtgooyWPTWjET46Q==from : 10.0.0.40
+
+< s3 >
+DEC DATA : Hello World
+
+< s3 >
+OBTAINING NEXT HOB ....
+
+< s3 >
+Sent : NEXT341
+
+
+< s3 >
+Controller response : null
+
+
+< s3 >
+NEXT HOB : null
+
+
+< s3 >
+entered sendtoswitch
+
+< s3 >
+Initializing socket then Connecting to : null
+ : 3000
 

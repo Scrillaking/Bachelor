@@ -1,22 +1,16 @@
 
-import socket
-import threading
-import select
-import time
-
+import socket , threading , select , time , sys
 
 class Chat_Client(threading.Thread):
 
 
  def __init__(self , name):
 	threading.Thread.__init__(self)
-	self.sock = None # Initialization of the socket is in the sendAndReceive method , which calls the connect function
 	self.name = name
 
 
  def run(self):
-	self.writeToLog('Started')
-
+	return
 
  def writeToLog(self , text):
 
@@ -26,40 +20,39 @@ class Chat_Client(threading.Thread):
 
  def connect(self):
 
-	self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	#sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-	self.sock.connect(('127.0.0.1',4500))
-	#return sock
-
-
- def sendOnly(self, msg):
-	msg += "\r\n"
-	#sock = self.connect()
-	self.sock.sendall(msg)
-	self.writeToLog('Sent : ' + msg)
-
-
+	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	sock.connect(('127.0.0.1',4500))
+	return sock
 
 
  def sendAndReceive(self, msg):
+
+	msg = msg.replace('\n', ' ').replace('\r', '')
 	msg += "\r\n"
 
-	self.connect()
-	self.sock.sendall(msg)
+	sock = self.connect()
+	sock.sendall(msg)
 	self.writeToLog('Sent : ' + msg)
 
 	while 1:
+	 
 	 time.sleep(0.01)
-	 response = self.sock.recv(1024)
+	 response = sock.recv(1024)
 
 	 if not response:
-		print 'whatever'
-		#sock.close()
-		#break
+		sock.close()
+		break
 
 	 else:
+		sock.close()
 		self.writeToLog('Controller response : ' + response)
 		return response
+
+		#try:
+		 
+		#except:
+		# self.writeToLog("EXCEPTION : "+str(sys.exc_info())) 
+			
 
 
 #client = Chat_Client("SomeName")

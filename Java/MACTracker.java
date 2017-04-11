@@ -116,7 +116,7 @@ public class MACTracker implements IOFMessageListener, IFloodlightModule, Runnab
 
 	@Override
 	public void startUp(FloodlightModuleContext context) throws FloodlightModuleException {
-		//floodlightProvider.addOFMessageListener(OFType.PACKET_IN, this);
+		floodlightProvider.addOFMessageListener(OFType.PACKET_IN, this);
 		try {
 			Thread thread = new Thread(this);
 			thread.start();
@@ -134,6 +134,7 @@ public class MACTracker implements IOFMessageListener, IFloodlightModule, Runnab
 	@Override
 	public net.floodlightcontroller.core.IListener.Command receive(IOFSwitch sw, OFMessage msg,
 			FloodlightContext cntx) {
+		
 		
 		
 		return Command.CONTINUE;

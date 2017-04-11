@@ -1,25 +1,9 @@
-< s1 >
-Started
-
-< s2 >
-Started
-
-< s3 >
-Started
-
-< s1 >
-Received : CONTROLLERKEY45
-
-< s1 >
-Sent : KEY45
-
-
-< s1 >
-Controller response : 917
-
-< h1 >
-Received : 917
-
-< h1 >
-SESSION KEY : 413
-
+listening on s1 for socket 
+opened host thread 
+entered run method of host
+s1 accepted someone (changed)  
+s1 got a client  
+h1 connected to s1 , did s1 change ? 
+h1 sent data to s1
+s1 received I am h1 
+h1 received : I hear you I am h1 

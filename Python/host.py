@@ -1,8 +1,8 @@
 
-import socket, optparse, os
+import socket , optparse , os , time
 from client import *
 from DH import *
-from AES import *
+from newAES import *
 
 class Host(object):
 
@@ -11,28 +11,27 @@ class Host(object):
 	self.ip = ip
 	self.port = port
 	self.name = name
+	self.myID = ''
 
 	self.dh = DiffieHellman()
 	self.sessionKey = ''
 
-	self.ipToKey = {
-	'10.0.0.20': '' , 
-	'10.0.0.30': '' , 
-	'10.0.0.40': ''
-	}
+	self.directory = {}
+
+	self.ipToKey = {}
 
 	self.networkNodes = {
-	'10.0.0.1': 2000 , 
-	'10.0.0.2': 2100 , 
-	'10.0.0.3': 2200 ,
+		'10.0.0.1': 2000 , 
+		'10.0.0.2': 2100 , 
+		'10.0.0.3': 2200 ,
 
-	'10.0.0.20': 3000 , 
-	'10.0.0.30': 3100 , 
-	'10.0.0.40': 3200
+		'10.0.0.20': 3000 , 
+		'10.0.0.30': 3000 , 
+		'10.0.0.40': 3000
 	}
+	self.socketIP = ''
 
-	self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	self.s.bind((self.ip, self.port))
+	self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	
 
  def writeToLog(self , text):
@@ -42,49 +41,102 @@ class Host(object):
 
 
  def send(self , ip , port , msg):
-
-	self.s.sendto(str(msg), (ip, port))
-
+	if self.socketIP == '':
+		self.writeToLog("Initializing socket then Connecting to : " + ip + " : " + str(port))
+		self.s.connect((ip, port))
+		time.sleep(1)
+		self.s.send(str(msg))
+		self.writeToLog("sent : " + msg)
+		self.socketIP = ip
+	elif self.socketIP == ip:
+		self.writeToLog("Sending msg as we already have an established socket with : " + ip)
+		self.s.send(str(msg))
+		self.writeToLog("sent : " + msg)
+	else:
+		self.writeToLog("Closing socket and opening a new connection with : " + ip)
+		self.s.shutdown(socket.SHUT_RDWR)
+		self.s.close()
+		self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.s.connect((ip, port))
+		time.sleep(1)
+		self.s.send(str(msg))
+		self.writeToLog("sent : " + msg)
+		self.socketIP = ip
 
  def receive(self):
 
 	d = self.s.recvfrom(4096)
-	receivedData = d[0]
-	senderAddress = d[1]
+	if d != '' :
+		receivedData = d[0]
+		senderAddress = d[1]
+		self.writeToLog("Received : "+str(receivedData))
+		return str(receivedData)
 
-	self.writeToLog("Received : "+str(receivedData))
-	return receivedData
+	
+
+	
 
 
- def choosePath(self):
+ def choosePath(self , dest):
 
 	return ['10.0.0.20' , '10.0.0.30' , '10.0.0.40']   #Will update it later	
 
- def pathToString(self, path):
+ 
+ def sendData(self , path , data):
 
-	return path[0] + ":" + path[1] + ":" + path[2] 
+	for curIP in reversed(path):
+	 aes = AESCipher()
+	 data = aes.encrypt(data,self.ipToKey[curIP])
+	 self.writeToLog("DATA NOW : "+str(data))
 
- def notifyController(self , path):
+	msg = "DATA" + str(self.nextID(long(self.myID))) + "_" + str(data)
+	self.send(path[0] , self.networkNodes[path[0]] , msg)
 
-	if not self.sessionKey:
-	 self.writeToLog("Session key is not yet known")
 
-	else: 
-	 cipher = AESCipher('mysecretpassword' , self.sessionKey)
-	 encrypted = cipher.encrypt(str(path))
+ def nextID(self , curID):
+	return (1 + 4*curID)
+
+
+ def establishCircuit(self , path , dest):
 	
-	 self.send(path[0],self.networkNodes[path[0]],"CONTROLLER"+encrypted) 
+	#Negotiate DH key with the controller
+	myPublic = self.dh.genPublicValue()
+	self.send(path[0] , self.networkNodes[path[0]] , "CONTROLLERKEY"+str(myPublic))
+	time.sleep(0.01)
+	response = self.receive()
 
+	info = response.split("_")
+	publicValue = info[0]
+	self.myID = info[1] 
 
- def negotiateKeys(self , path):
-	
+	self.directory['h3'] = str(self.myID)
+	self.sessionKey = self.dh.genSharedSecret(long(publicValue))
+	self.writeToLog("SESSION KEY : "+self.sessionKey)
+
+	#Send the path
+	time.sleep(0.01)
+	aes = AESCipher()
+
+	pathString = ''
+	for node in path:
+	 pathString += (node+' ')
+
+	time.sleep(0.01)
+	encoded = aes.encrypt(pathString,self.sessionKey)
+	self.send(path[0] , self.networkNodes[path[0]] , "CONTROLLERPATH"+str(self.myID)+"_"+encoded)
+	resp = self.receive()
+
+	#if(resp is "OK"):
+	myIDCopy = self.myID
+
 	for curIP in path:
-
-	 if curIP in self.networkNodes.keys():
-		sharedKey = os.urandom(16) 
-		self.ipToKey[curIP] = sharedKey
-		self.send(curIP , self.networkNodes[curIP] , sharedKey)
-
-		#otherPublic = self.receive()
-
-		self.writeToLog(str(self.ipToKey))  
+	 self.writeToLog(">>>>>>>>>> "+curIP) 
+	 myIDCopy = self.nextID(long(myIDCopy)) 
+	 self.send(curIP , self.networkNodes[curIP] , "KEY" + str(myIDCopy) + "_" + str(myPublic))
+	 time.sleep(1)
+	 reply = self.receive()
+	 sharedKey = self.dh.genSharedSecret(long(reply))
+	 self.writeToLog("Shared key : "+sharedKey)
+	 self.ipToKey[curIP] = sharedKey
+	 
+	self.writeToLog(str(self.ipToKey))
